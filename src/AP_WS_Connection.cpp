@@ -128,7 +128,7 @@ namespace OpenWifi {
 
 			CN_ = Poco::trim(Poco::toLower(PeerCert.commonName()));
 			State_.VerifiedCertificate = GWObjects::VALID_CERTIFICATE;
-			poco_trace(Logger_,
+			poco_warning(Logger_,
 					   fmt::format("TLS-CONNECTION({}): Session={} Valid certificate: CN={}", CId_,
 								   State_.sessionId, CN_));
 

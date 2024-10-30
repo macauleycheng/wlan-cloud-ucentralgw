@@ -42,12 +42,17 @@ namespace OpenWifi {
 					Logger(),
 					fmt::format("CERTIFICATE({}): issuer mismatch. Local='{}' Incoming='{}'",
 								ConnectionId, IssuerCert_->issuerName(), Certificate.issuerName()));
-				return false;
+				//return false;
 			}
 			return true;
 		}
 		return false;
 	}
+
+    int sslCallack(int preverify_ok, X509_STORE_CTX *x509_ctx) {
+        std::cout << "macauley callback   " << preverify_ok << std::endl;;
+        return 1;
+    }
 
 	int AP_WS_Server::Start() {
 
@@ -110,6 +115,8 @@ namespace OpenWifi {
 			// Context->disableStatelessSessionResumption();
 			Context->disableProtocols(Poco::Net::Context::PROTO_TLSV1 |
 									  Poco::Net::Context::PROTO_TLSV1_1);
+
+            SSL_CTX_set_verify( Context->sslContext(), SSL_VERIFY_PEER, sslCallack);
 
 			auto WebServerHttpParams = new Poco::Net::HTTPServerParams;
 			WebServerHttpParams->setMaxThreads(50);
